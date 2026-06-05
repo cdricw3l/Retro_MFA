@@ -11,7 +11,7 @@ SRCS_OBJS= $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(SRCS_OBJS)
-	$(CC) $(CFLAGS) $(SRCS_OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(SRCS_OBJS) -lbsd -o $(NAME)
 
 clean: 
 	rm -f $(SRCS_OBJS)

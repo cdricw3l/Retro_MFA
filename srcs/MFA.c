@@ -6,7 +6,7 @@
 /*   By: cebouhad <cebouhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 18:47:40 by cebouhad          #+#    #+#             */
-/*   Updated: 2026/06/05 20:40:08 by cebouhad         ###   ########.fr       */
+/*   Updated: 2026/06/05 21:35:59 by cebouhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,41 +22,35 @@ int get_mfa_fd(char *path)
     return (fd);
 }
 
-void read_buffer(unsigned char buffer[BUFFER_SIZE])
+void read_buffer(unsigned char buffer[BUFFER_SIZE], int b_read)
 {
     int i;
     char c;
 
     i = 0;
-    while (i < BUFFER_SIZE)
+    while (i < b_read)
     {
         c = buffer[i];
         printf("%c", c);
         i++;
     }
-    printf("\n");
 }
 
 
 
 char *find_bank_header(char buffer[BUFFER_SIZE])
 {
-    char *start_str;
-
-
-    start_str = strchr(buffer, 'A');
+    char *start_str = strnstr((char *)buffer, "AGMI", 4);;
+    // if(start_str)
+    // {
+    //     write(STDOUT_FILENO, start_str, 4);
+    //     write(STDOUT_FILENO, "\n", 1);
+    // }
     if(start_str)
     {
+        start_str = strnstr(start_str, "AGMI", 4);
         write(STDOUT_FILENO, start_str, 4);
         write(STDOUT_FILENO, "\n", 1);
-    }
-    
-    if(start_str && !strncmp(start_str, "AGMI", 4))
-    {
-
-        write(STDOUT_FILENO, "Flag found\n", strlen("Flag found\n"));
-        write(STDOUT_FILENO, start_str, 4);
-        return (start_str);
     }
     return (NULL);
 }
@@ -64,10 +58,10 @@ char *find_bank_header(char buffer[BUFFER_SIZE])
 int read_mfa(char *path)
 {
     int b_read;
-    char *str;
+    //char *str;
     int fd;
     int off_set;
-    char buffer[BUFFER_SIZE];
+    unsigned char buffer[BUFFER_SIZE + 1];
     
     fd = get_mfa_fd(path);
     if(fd < 0)
@@ -76,14 +70,14 @@ int read_mfa(char *path)
         return (ERR);
     }
     b_read = 1;
-    str = NULL;
+    //str = NULL;
     off_set = 0;
-    while (b_read && !str)
+    while (b_read /*&& !str*/)
     {
-        b_read = read(fd, buffer, BUFFER_SIZE - 1);
+        b_read = read(fd, buffer, BUFFER_SIZE);
         buffer[b_read] = '\0';
-        //read_buffer(buffer);
-        str = find_bank_header(buffer);
+        read_buffer(buffer, b_read);
+        //str = find_bank_header(buffer);
         off_set += b_read;
     }
     
@@ -96,6 +90,7 @@ int read_mfa(char *path)
 
 int main(int argc, char **argv)
 {
+    
 
     if(argc < 2)
         return (1);
