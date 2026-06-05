@@ -6,7 +6,7 @@
 /*   By: cebouhad <cebouhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 18:48:05 by cebouhad          #+#    #+#             */
-/*   Updated: 2026/06/05 18:58:11 by cebouhad         ###   ########.fr       */
+/*   Updated: 2026/06/05 19:07:53 by cebouhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 
 #define BUFFER_SIZE 1024
 #define ERR 1
+#define OK  0
 
 
 #endif
