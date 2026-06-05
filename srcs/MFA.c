@@ -6,7 +6,7 @@
 /*   By: cebouhad <cebouhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 18:47:40 by cebouhad          #+#    #+#             */
-/*   Updated: 2026/06/05 20:03:25 by cebouhad         ###   ########.fr       */
+/*   Updated: 2026/06/05 20:40:08 by cebouhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,29 +31,68 @@ void read_buffer(unsigned char buffer[BUFFER_SIZE])
     while (i < BUFFER_SIZE)
     {
         c = buffer[i];
-        printf("%d", c);
+        printf("%c", c);
         i++;
     }
     printf("\n");
 }
 
+
+
+char *find_bank_header(char buffer[BUFFER_SIZE])
+{
+    char *start_str;
+
+
+    start_str = strchr(buffer, 'A');
+    if(start_str)
+    {
+        write(STDOUT_FILENO, start_str, 4);
+        write(STDOUT_FILENO, "\n", 1);
+    }
+    
+    if(start_str && !strncmp(start_str, "AGMI", 4))
+    {
+
+        write(STDOUT_FILENO, "Flag found\n", strlen("Flag found\n"));
+        write(STDOUT_FILENO, start_str, 4);
+        return (start_str);
+    }
+    return (NULL);
+}
+
 int read_mfa(char *path)
 {
     int b_read;
+    char *str;
     int fd;
-    unsigned char buffer[BUFFER_SIZE];
+    int off_set;
+    char buffer[BUFFER_SIZE];
     
     fd = get_mfa_fd(path);
+    if(fd < 0)
+    {
+        perror("Open:");
+        return (ERR);
+    }
     b_read = 1;
-    while (b_read)
+    str = NULL;
+    off_set = 0;
+    while (b_read && !str)
     {
         b_read = read(fd, buffer, BUFFER_SIZE - 1);
         buffer[b_read] = '\0';
-        read_buffer(buffer);
+        //read_buffer(buffer);
+        str = find_bank_header(buffer);
+        off_set += b_read;
     }
+    
     return (OK);
 }
+/*
+    https://mfa.ilikefemboys.com/
 
+*/
 
 int main(int argc, char **argv)
 {

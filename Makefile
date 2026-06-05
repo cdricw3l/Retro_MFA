@@ -17,8 +17,14 @@ clean:
 	rm -f $(SRCS_OBJS)
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) *.txt
 
 re: fclean $(NAME)
+
+COM=generique_com
+git:
+	git add .
+	git commit -m  $(COM)
+	git push origin $(shell git branch --show-current)
 
 .PHONY: all $(NAME) clean fclean re
