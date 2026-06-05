@@ -6,7 +6,7 @@
 /*   By: cebouhad <cebouhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 18:47:40 by cebouhad          #+#    #+#             */
-/*   Updated: 2026/06/05 21:35:59 by cebouhad         ###   ########.fr       */
+/*   Updated: 2026/06/05 21:36:50 by cebouhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int read_mfa(char *path)
 }
 /*
     https://mfa.ilikefemboys.com/
-
+    https://mfa.ilikefemboys.com/types/banks/image/cimagebank/
 */
 
 int main(int argc, char **argv)
