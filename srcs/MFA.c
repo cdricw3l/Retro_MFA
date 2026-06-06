@@ -6,7 +6,7 @@
 /*   By: cebouhad <cebouhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 18:47:40 by cebouhad          #+#    #+#             */
-/*   Updated: 2026/06/05 21:36:50 by cebouhad         ###   ########.fr       */
+/*   Updated: 2026/06/06 09:40:03 by cebouhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,52 @@ char *find_bank_header(char buffer[BUFFER_SIZE])
     return (NULL);
 }
 
+void print_bit(uint16_t v)
+{
+    int bit;
+    
+    bit = 15;
+    while (bit >= 0)
+    {
+        printf("%d", (v >> bit) & 1);
+        bit--;
+    }
+    printf("\n");
+}
+
+// void convert_char_to_byte(unsigned char *buffer)
+// {
+//     int bit;
+//     uint16_t value;
+//     int idx;
+    
+//     bit = 15;
+//     idx = 0;
+//     value = 0;
+//     while (bit >= 0)
+//     {
+//         value |= (buffer[idx] >> bit) & 1;
+//         if(bit == 8)
+//             idx++;
+//         value = value << 1;
+//         bit--;
+//     }
+//     print_bit(value);
+// }
+void convert_char_to_byte(unsigned char *buffer)
+{
+    uint16_t value;
+    
+    value = buffer[0] << 8 | buffer[1] ;
+    print_bit(value);
+    printf("value %d\n", value);
+}
+
 int read_mfa(char *path)
 {
     int b_read;
     //char *str;
     int fd;
-    int off_set;
     unsigned char buffer[BUFFER_SIZE + 1];
     
     fd = get_mfa_fd(path);
@@ -69,17 +109,12 @@ int read_mfa(char *path)
         perror("Open:");
         return (ERR);
     }
-    b_read = 1;
-    //str = NULL;
-    off_set = 0;
-    while (b_read /*&& !str*/)
-    {
-        b_read = read(fd, buffer, BUFFER_SIZE);
-        buffer[b_read] = '\0';
-        read_buffer(buffer, b_read);
-        //str = find_bank_header(buffer);
-        off_set += b_read;
-    }
+    lseek(fd, 16, SEEK_SET);
+    b_read = read(fd, buffer, 4);
+    buffer[b_read] = '\0';
+
+
+    convert_char_to_byte(buffer);
     
     return (OK);
 }

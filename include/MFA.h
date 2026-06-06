@@ -6,7 +6,7 @@
 /*   By: cebouhad <cebouhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 18:48:05 by cebouhad          #+#    #+#             */
-/*   Updated: 2026/06/05 21:18:19 by cebouhad         ###   ########.fr       */
+/*   Updated: 2026/06/06 09:11:26 by cebouhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 #include <unistd.h>
 #include <assert.h>
 #include <unistd.h>
-
+#include <stdlib.h>
+#include <stdint.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
