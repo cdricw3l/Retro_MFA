@@ -6,9 +6,9 @@ Le principe de ce rush est de retro ingenieurer des fichier MFA dans l'objectif 
 
 ## Ques qu'un fichier mfa?
 
-https://filext.com/file-extension/MFA
-https://clickwiki.github.io/file-extensions/MFA/
-https://mfa.ilikefemboys.com/
+https://filext.com/file-extension/MFA \
+https://clickwiki.github.io/file-extensions/MFA/ \
+https://mfa.ilikefemboys.com/ \
 
 ## strategie pour trouver les image:
 
