@@ -6,7 +6,7 @@
 /*   By: cdric.b <cdric.b@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 18:47:40 by cebouhad          #+#    #+#             */
-/*   Updated: 2026/06/07 08:29:03 by cdric.b          ###   ########.fr       */
+/*   Updated: 2026/06/07 09:22:32 by cdric.b          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,22 +78,23 @@ int get_agmi_flags(int fd)
 void agmi_flag(int fd)
 {
     char buffer[4];
-    unsigned char b[4097];
     int agmi;
-    int br;
     
     agmi = get_agmi_flags(fd);
     lseek(fd, agmi, SEEK_SET);
     read(fd, buffer, 4);
     write(STDOUT_FILENO, buffer, 4);
-    br = read(fd, b, 4096);
-    buffer[br] = '\0';
-    int i = 0;
-    while (i < br)
-    {
-        printf("%d ", b[i]);
-        i++;
-    }
+    NL;
+    uint16_t v;
+
+    printf("size %d\n", sizeof(uint16_t));
+    read(fd, &v, sizeof(uint16_t));
+    printf("voici éa version %d\n", v);
+    read(fd, &v, sizeof(uint16_t));
+    printf("voici la taille %d\n", v);
+    read(fd, &v, sizeof(uint16_t));
+    printf("voici la taille %d\n", v);
+
     NL;
 }
 
@@ -124,10 +125,7 @@ int main(int argc, char **argv)
     if(argc < 2)
         return (1);
     
-    char b[4];
-    int fd;
-
-    fd = get_mfa_fd("MFA/blue.mfa");
+  
     read_mfa(argv[1]);
     return (0);
 }
