@@ -8,7 +8,7 @@ Le principe de ce rush est de retro ingenieurer des fichier MFA dans l'objectif 
 
 https://filext.com/file-extension/MFA \
 https://clickwiki.github.io/file-extensions/MFA/ \
-https://mfa.ilikefemboys.com/ \
+https://mfa.ilikefemboys.com/
 
 ## strategie pour trouver les image:
 
@@ -40,4 +40,4 @@ int get_agmi_flags(int fd)
 }
 ```
 
-![Texte alternatif](/sreen/cbank_struct.png "Titre de l'image").
+![image](/screen/cbank_struct.png).
