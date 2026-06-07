@@ -29,6 +29,7 @@ fclean: clean
 re: fclean $(NAME)
 
 COM=generique_com
+
 git:
 	git add .
 	git commit -m  $(COM)
