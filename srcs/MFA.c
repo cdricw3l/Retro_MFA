@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MFA.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cebouhad <cebouhad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdric.b <cdric.b@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 18:47:40 by cebouhad          #+#    #+#             */
-/*   Updated: 2026/06/06 09:40:03 by cebouhad         ###   ########.fr       */
+/*   Updated: 2026/06/07 08:29:03 by cdric.b          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,73 +35,71 @@ void read_buffer(unsigned char buffer[BUFFER_SIZE], int b_read)
         i++;
     }
 }
-
-
-
-char *find_bank_header(char buffer[BUFFER_SIZE])
+void print_bit(uint16_t v, int size)
 {
-    char *start_str = strnstr((char *)buffer, "AGMI", 4);;
-    // if(start_str)
-    // {
-    //     write(STDOUT_FILENO, start_str, 4);
-    //     write(STDOUT_FILENO, "\n", 1);
-    // }
-    if(start_str)
+    size--;
+    while (size >= 0)
     {
-        start_str = strnstr(start_str, "AGMI", 4);
-        write(STDOUT_FILENO, start_str, 4);
-        write(STDOUT_FILENO, "\n", 1);
-    }
-    return (NULL);
-}
-
-void print_bit(uint16_t v)
-{
-    int bit;
-    
-    bit = 15;
-    while (bit >= 0)
-    {
-        printf("%d", (v >> bit) & 1);
-        bit--;
+        
+        printf("%d", (v >> size) & 1);
+        // if(size % 8 == 0)
+        //     NL;
+        size--;
     }
     printf("\n");
 }
 
-// void convert_char_to_byte(unsigned char *buffer)
-// {
-//     int bit;
-//     uint16_t value;
-//     int idx;
-    
-//     bit = 15;
-//     idx = 0;
-//     value = 0;
-//     while (bit >= 0)
-//     {
-//         value |= (buffer[idx] >> bit) & 1;
-//         if(bit == 8)
-//             idx++;
-//         value = value << 1;
-//         bit--;
-//     }
-//     print_bit(value);
-// }
-void convert_char_to_byte(unsigned char *buffer)
+
+int get_agmi_flags(int fd)
 {
-    uint16_t value;
+    int b_read;
+    char buffer[1];
+    char b2[3];
+
+    if(fd < 0)
+        return (-1);
+    b_read = 0;
+    while (1)
+    {
+        b_read += read(fd, buffer, 1);
+        if(buffer[0] == 'A')
+        {
+            
+            b_read += read(fd, b2, 3);
+            if(!strncmp("GMI", b2, 3))
+                return (b_read - 4);
+        }
+    }
+    return (0);
+}
+
+
+
+void agmi_flag(int fd)
+{
+    char buffer[4];
+    unsigned char b[4097];
+    int agmi;
+    int br;
     
-    value = buffer[0] << 8 | buffer[1] ;
-    print_bit(value);
-    printf("value %d\n", value);
+    agmi = get_agmi_flags(fd);
+    lseek(fd, agmi, SEEK_SET);
+    read(fd, buffer, 4);
+    write(STDOUT_FILENO, buffer, 4);
+    br = read(fd, b, 4096);
+    buffer[br] = '\0';
+    int i = 0;
+    while (i < br)
+    {
+        printf("%d ", b[i]);
+        i++;
+    }
+    NL;
 }
 
 int read_mfa(char *path)
 {
-    int b_read;
-    //char *str;
     int fd;
-    unsigned char buffer[BUFFER_SIZE + 1];
     
     fd = get_mfa_fd(path);
     if(fd < 0)
@@ -109,13 +107,8 @@ int read_mfa(char *path)
         perror("Open:");
         return (ERR);
     }
-    lseek(fd, 16, SEEK_SET);
-    b_read = read(fd, buffer, 4);
-    buffer[b_read] = '\0';
-
-
-    convert_char_to_byte(buffer);
-    
+  
+    agmi_flag(fd);
     return (OK);
 }
 /*
@@ -125,11 +118,16 @@ int read_mfa(char *path)
 
 int main(int argc, char **argv)
 {
-    
+    (void)argc;
+    (void)argv;
 
     if(argc < 2)
         return (1);
     
+    char b[4];
+    int fd;
+
+    fd = get_mfa_fd("MFA/blue.mfa");
     read_mfa(argv[1]);
     return (0);
 }

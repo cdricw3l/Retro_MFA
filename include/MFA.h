@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   MFA.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cebouhad <cebouhad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdric.b <cdric.b@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/05 18:48:05 by cebouhad          #+#    #+#             */
-/*   Updated: 2026/06/06 09:11:26 by cebouhad         ###   ########.fr       */
+/*   Updated: 2026/06/06 22:42:35 by cdric.b          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MFA_H
 #define MFA_H
 
+#include <limits.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <assert.h>
@@ -23,7 +24,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
-#include <bsd/string.h>
+# ifndef __APPLE__
+    #include <bsd/string.h>
+#endif
 
 #define C_RED "\e[0;31;1m"
 #define C_GREEN "\e[0;32;1m"
@@ -38,5 +41,5 @@
 #define OK  0
 #define DEBUGG printf(C_RED"Here"C_RESET"\n")
 #define BUFFER_SIZE 4
-
+#define NL printf("\n")
 #endif
